@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>晚餐吃点啥</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 20px;
+            background-color: #f0f2f5;
+        }
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        input {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        #result {
+            margin-top: 2rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px;
+            margin: 8px 0;
+            background-color: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .day {
+            color: #3498db;
+            font-weight: bold;
+        }
+
+        .food {
+            color: #2c3e50;
+        }
+
+        #foodList {
+            color: #7f8c8d;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🍽️ 晚餐吃点啥 🎉</h1>
+        
+        <div class="input-group">
+            <input type="text" id="foodInput" placeholder="输入你想吃的晚餐">
+            <button onclick="addFood()">添加</button>
+        </div>
+        
+        <div id="foodList"></div>
+        
+        <div style="text-align: center">
+            <button onclick="draw()" style="padding: 12px 24px; font-size: 16px;">
+                开始抽奖！
+            </button>
+        </div>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        let foods = [];
+
+        function addFood() {
+            const input = document.getElementById('foodInput');
+            const food = input.value.trim();
+            
+            if (food) {
+                if (!foods.includes(food)) {
+                    foods.push(food);
+                    updateFoodList();
+                    input.value = '';
+                } else {
+                    alert('这个选项已经存在啦！');
+                }
+            }
+        }
+
+        function updateFoodList() {
+            const foodList = document.getElementById('foodList');
+            foodList.innerHTML = `已添加选项：${foods.join('、')}`;
+        }
+
+        function draw() {
+            if (foods.length < 4) {
+                alert('请至少添加4个晚餐选项');
+                return;
+            }
+
+            // 随机排序并取前4个
+            const shuffled = [...foods].sort(() => Math.random() - 0.5).slice(0, 4);
+            const days = ['周一', '周二', '周三', '周四'];
+            
+            const resultHTML = shuffled.map((food, index) => `
+                <div class="result-item">
+                    <span class="day">${days[index]}</span>
+                    <span class="food">${food}</span>
+                </div>
+            `).join('');
+
+            document.getElementById('result').innerHTML = resultHTML;
+        }
+    </script>
+</body>
+</html>
